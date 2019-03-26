@@ -6,12 +6,14 @@ using UnityEngine.UI;
 public class TextController : MonoBehaviour
 {
     private TempObject tempObjectInternal = new TempObject();
-    private Text uiText;
+    public GameObject MessageLabelGameObject;
+
+    private Text MessageLabel;
 
     // Start is called before the first frame update
     void Start()
     {
-        this.uiText = this.GetComponent<Text>();
+        this.MessageLabel = this.MessageLabelGameObject.GetComponent<Text>();
     }
 
     public void SetTempObject(TempObject temperature)
@@ -22,7 +24,7 @@ public class TextController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.uiText.text = $"Message: {tempObjectInternal.sender}" +
+        this.MessageLabel.text = $"Message: {tempObjectInternal.sender}" +
                            $"- {tempObjectInternal.temperature}" +
                            $"- {tempObjectInternal.humidity}" +
                            $"- {tempObjectInternal.time}";

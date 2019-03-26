@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public partial class SignalRUnityController : MonoBehaviour
 {
     public string signalRURL;
-    public GameObject UIText;
+    public GameObject TextControllerGameObject;
+    public Text StatusLabel;
 
     private HubConnection hubConnection = null;
     private TextController textController;
@@ -20,7 +22,7 @@ public partial class SignalRUnityController : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        this.textController = this.UIText.GetComponent<TextController>();
+        this.textController = this.TextControllerGameObject.GetComponent<TextController>();
 
         var signalRConnData = await this.GetSignalRConnDataAsync();
 
@@ -61,18 +63,19 @@ public partial class SignalRUnityController : MonoBehaviour
 
             await this.hubConnection.StartAsync();
 
+            this.StatusLabel.text = "Status: connected";
+
             Debug.Log("Signalr connected ...");
         }
         else
         {
+            this.StatusLabel.text = "Status: already connected";
             Debug.Log("Signalr already connected ...");
         }
     }
 
     private async Task<SignalRConnData> GetSignalRConnDataAsync()
     {
-        // Read this article to find out more info about Azure Functions and SignalR Service 
-        // https://docs.microsoft.com/en-us/azure/azure-signalr/signalr-quickstart-azure-functions-csharp
         var jsonResponse = await this.GetAsync(this.signalRURL);
 
         return JsonConvert.DeserializeObject<SignalRConnData>(jsonResponse);
